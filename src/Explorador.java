@@ -13,6 +13,7 @@ import javax.swing.UIManager;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.*;
 import javax.swing.tree.TreeSelectionModel;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -32,24 +33,12 @@ import java.awt.GridLayout;
  * @author bms
  */
 public class Explorador extends javax.swing.JFrame {
-    public DefaultMutableTreeNode top;
     /**
      * Creates new form Explorador
      */
     public Explorador() {
         initComponents();
         this.setLocationRelativeTo(null);
-        //Create the nodes.
-        top = new DefaultMutableTreeNode("The Java Series");
-        createNodes();
-        //Create a tree that allows one selection at a time.
-        jTree2 = new JTree(top);
-        jTree2.getSelectionModel().setSelectionMode
-                (TreeSelectionModel.SINGLE_TREE_SELECTION);
-
-        //Create the scroll pane and add the tree to it. 
-        jScrollPane2.setViewportView(jTree2);
-
     }
 
     /**
@@ -61,13 +50,21 @@ public class Explorador extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPopupMenu1 = new javax.swing.JPopupMenu();
+        jPopupMenu = new javax.swing.JPopupMenu();
+        jMenuItemNewFile = new javax.swing.JMenuItem();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTree2 = new javax.swing.JTree();
-        jButton1 = new javax.swing.JButton();
+        jTreeFiles = new javax.swing.JTree();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+
+        jMenuItemNewFile.setText("Nuevo Archivo");
+        jMenuItemNewFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemNewFileActionPerformed(evt);
+            }
+        });
+        jPopupMenu.add(jMenuItemNewFile);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -86,16 +83,14 @@ public class Explorador extends javax.swing.JFrame {
         treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("virus.bat");
         treeNode2.add(treeNode3);
         treeNode1.add(treeNode2);
-        jTree2.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        jTree2.setEditable(true);
-        jScrollPane2.setViewportView(jTree2);
-
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        jTreeFiles.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        jTreeFiles.setEditable(true);
+        jTreeFiles.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jTreeFilesMouseReleased(evt);
             }
         });
+        jScrollPane2.setViewportView(jTreeFiles);
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -111,40 +106,40 @@ public class Explorador extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-        DefaultMutableTreeNode category = null;
-        DefaultMutableTreeNode book = null;
-        category = new DefaultMutableTreeNode("Books for Java Programmers");
-        top.add(category);
+    private void jMenuItemNewFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNewFileActionPerformed
+        // TODO add your handling code here:
+        // Boton crear nuevo archivo
+        System.out.println("Se pulso crear archivo");
+        DefaultTreeModel model = (DefaultTreeModel) jTreeFiles.getModel();
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+        DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) jTreeFiles.getLastSelectedPathComponent();
+        DefaultMutableTreeNode newFile = new DefaultMutableTreeNode("Nuevo Archivo");
+        DefaultMutableTreeNode parent = (selectedNode == null) ? root : selectedNode;
+        parent.add(newFile);
+        model.reload(parent);
+    }//GEN-LAST:event_jMenuItemNewFileActionPerformed
 
-        //original Tutorial
-        book = new DefaultMutableTreeNode("The Java Tutorial: A Short Course on the Basics");
-        category.add(book);
-        jTree2 = new JTree(top);
-        jTree2.getSelectionModel().setSelectionMode
-                (TreeSelectionModel.SINGLE_TREE_SELECTION);
-        jScrollPane2.setViewportView(jTree2);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jTreeFilesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTreeFilesMouseReleased
+        // TODO add your handling code here:
+        // Evento cuando se da click derecho
+        if (evt.isPopupTrigger()) {
+            jPopupMenu.show(jTreeFiles, evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_jTreeFilesMouseReleased
 
     /**
      * @param args the command line arguments
@@ -171,45 +166,14 @@ public class Explorador extends javax.swing.JFrame {
         });
     }
     
-        private void createNodes() {
-        DefaultMutableTreeNode category = null;
-        DefaultMutableTreeNode book = null;
-
-        category = new DefaultMutableTreeNode("Books for Java Programmers");
-        top.add(category);
-
-        //original Tutorial
-        book = new DefaultMutableTreeNode("The Java Tutorial: A Short Course on the Basics");
-        category.add(book);
-
-        //Tutorial Continued
-        book = new DefaultMutableTreeNode("The Java Tutorial Continued: The Rest of the JDK");
-        category.add(book);
-
-        //JFC Swing Tutorial
-        book = new DefaultMutableTreeNode("The JFC Swing Tutorial: A Guide to Constructing GUIs");
-        category.add(book);
-
-        //Bloch
-        book = new DefaultMutableTreeNode("Effective Java Programming Language Guide");
-        category.add(book);
-
-        //Arnold/Gosling
-        book = new DefaultMutableTreeNode("The Java Programming Language");
-        category.add(book);
-        
-        category = new DefaultMutableTreeNode("hohohoho :3");
-        top.add(category);
-
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPopupMenu jPopupMenu1;
+    private javax.swing.JMenuItem jMenuItemNewFile;
+    private javax.swing.JPopupMenu jPopupMenu;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTree jTree2;
+    private javax.swing.JTree jTreeFiles;
     // End of variables declaration//GEN-END:variables
 }
