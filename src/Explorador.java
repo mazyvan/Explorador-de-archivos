@@ -33,6 +33,7 @@ import java.awt.GridLayout;
  * @author bms
  */
 public class Explorador extends javax.swing.JFrame {
+
     /**
      * Creates new form Explorador
      */
@@ -86,6 +87,9 @@ public class Explorador extends javax.swing.JFrame {
         jTreeFiles.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         jTreeFiles.setEditable(true);
         jTreeFiles.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTreeFilesMouseClicked(evt);
+            }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 jTreeFilesMouseReleased(evt);
             }
@@ -123,7 +127,6 @@ public class Explorador extends javax.swing.JFrame {
     private void jMenuItemNewFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNewFileActionPerformed
         // TODO add your handling code here:
         // Boton crear nuevo archivo
-        System.out.println("Se pulso crear archivo");
         DefaultTreeModel model = (DefaultTreeModel) jTreeFiles.getModel();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
         DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) jTreeFiles.getLastSelectedPathComponent();
@@ -131,29 +134,33 @@ public class Explorador extends javax.swing.JFrame {
         DefaultMutableTreeNode parent = (selectedNode == null) ? root : selectedNode;
         parent.add(newFile);
         model.reload(parent);
+        jTreeFiles.startEditingAtPath(new TreePath(newFile.getPath()));
     }//GEN-LAST:event_jMenuItemNewFileActionPerformed
 
     private void jTreeFilesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTreeFilesMouseReleased
         // TODO add your handling code here:
         // Evento cuando se da click derecho
+        if (jTreeFiles.getPathForLocation(evt.getX(), evt.getY()) == null) jTreeFiles.clearSelection();
         if (evt.isPopupTrigger()) {
             jPopupMenu.show(jTreeFiles, evt.getX(), evt.getY());
         }
     }//GEN-LAST:event_jTreeFilesMouseReleased
 
+    private void jTreeFilesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTreeFilesMouseClicked
+        // TODO add your handling code here:
+        if (jTreeFiles.getPathForLocation(evt.getX(), evt.getY()) == null) jTreeFiles.clearSelection();
+    }//GEN-LAST:event_jTreeFilesMouseClicked
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
-        try
-        {
+
+        try {
             JFrame.setDefaultLookAndFeelDecorated(true);
             JDialog.setDefaultLookAndFeelDecorated(true);
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "LookAndFeel not found");
         }
@@ -165,7 +172,7 @@ public class Explorador extends javax.swing.JFrame {
             }
         });
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
