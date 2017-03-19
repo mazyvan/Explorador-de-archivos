@@ -1,27 +1,9 @@
 
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JTree;
-import javax.swing.UIManager;
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.UIManager;
-
-import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.*;
-import javax.swing.tree.TreeSelectionModel;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-
-import java.net.URL;
-import java.io.IOException;
-import java.awt.Dimension;
-import java.awt.GridLayout;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -53,6 +35,7 @@ public class Explorador extends javax.swing.JFrame {
 
         jPopupMenu = new javax.swing.JPopupMenu();
         jMenuItemNewFile = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTreeFiles = new javax.swing.JTree();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -66,6 +49,14 @@ public class Explorador extends javax.swing.JFrame {
             }
         });
         jPopupMenu.add(jMenuItemNewFile);
+
+        jMenuItem1.setText("Eliminar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jPopupMenu.add(jMenuItem1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -127,20 +118,23 @@ public class Explorador extends javax.swing.JFrame {
     private void jMenuItemNewFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNewFileActionPerformed
         // TODO add your handling code here:
         // Boton crear nuevo archivo
-        DefaultTreeModel model = (DefaultTreeModel) jTreeFiles.getModel();
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+        DefaultTreeModel tree = (DefaultTreeModel) jTreeFiles.getModel();
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getRoot();
         DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) jTreeFiles.getLastSelectedPathComponent();
         DefaultMutableTreeNode newFile = new DefaultMutableTreeNode("Nuevo Archivo");
         DefaultMutableTreeNode parent = (selectedNode == null) ? root : selectedNode;
         parent.add(newFile);
-        model.reload(parent);
+        tree.reload(parent);
         jTreeFiles.startEditingAtPath(new TreePath(newFile.getPath()));
     }//GEN-LAST:event_jMenuItemNewFileActionPerformed
 
     private void jTreeFilesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTreeFilesMouseReleased
         // TODO add your handling code here:
         // Evento cuando se da click derecho
-        if (jTreeFiles.getPathForLocation(evt.getX(), evt.getY()) == null) jTreeFiles.clearSelection();
+        if (jTreeFiles.getPathForLocation(evt.getX(), evt.getY()) == null) {
+            jTreeFiles.clearSelection();
+        }
+        
         if (evt.isPopupTrigger()) {
             jPopupMenu.show(jTreeFiles, evt.getX(), evt.getY());
         }
@@ -148,8 +142,21 @@ public class Explorador extends javax.swing.JFrame {
 
     private void jTreeFilesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTreeFilesMouseClicked
         // TODO add your handling code here:
-        if (jTreeFiles.getPathForLocation(evt.getX(), evt.getY()) == null) jTreeFiles.clearSelection();
+        if (jTreeFiles.getPathForLocation(evt.getX(), evt.getY()) == null) {
+            jTreeFiles.clearSelection();
+        }
     }//GEN-LAST:event_jTreeFilesMouseClicked
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        DefaultTreeModel tree = (DefaultTreeModel) jTreeFiles.getModel();
+        DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) jTreeFiles.getLastSelectedPathComponent();
+        if (selectedNode != null) {
+            TreeNode parent = selectedNode.getParent();
+            selectedNode.removeFromParent();
+            tree.reload(parent);
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -178,6 +185,7 @@ public class Explorador extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItemNewFile;
     private javax.swing.JPopupMenu jPopupMenu;
     private javax.swing.JScrollPane jScrollPane2;
