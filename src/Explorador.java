@@ -316,7 +316,7 @@ public class Explorador extends javax.swing.JFrame {
                 null, options, null);
         if (buttonPressed == 0) {
             try {
-                Desktop.getDesktop().browse(new URL("http://www.google.com").toURI());
+                Desktop.getDesktop().browse(new URL("https://github.com/mazyvan/Explorador-de-archivos").toURI());
             } catch (Exception e) {
             }
         }
