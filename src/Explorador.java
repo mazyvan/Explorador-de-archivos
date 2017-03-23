@@ -1,4 +1,7 @@
 
+import java.awt.event.KeyEvent;
+import java.util.Arrays;
+import java.util.Enumeration;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JFrame;
@@ -38,6 +41,10 @@ public class Explorador extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTreeFiles = new javax.swing.JTree();
+        jButton1 = new javax.swing.JButton();
+        jTextFieldSearch = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -85,7 +92,24 @@ public class Explorador extends javax.swing.JFrame {
                 jTreeFilesMouseReleased(evt);
             }
         });
+        jTreeFiles.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTreeFilesKeyPressed(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTreeFiles);
+
+        jButton1.setText("Buscar Archivo/Carpeta");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jTextFieldSearch.setToolTipText("");
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel1.setText("Ruta del archivo seleccionado: ");
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -101,23 +125,41 @@ public class Explorador extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 454, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jTextFieldSearch)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton1)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jTextFieldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * EVENTO: Botón Crear Nuevo Archivo/Carpeta
+     */
     private void jMenuItemNewFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNewFileActionPerformed
-        // TODO add your handling code here:
-        // Boton crear nuevo archivo
         DefaultTreeModel tree = (DefaultTreeModel) jTreeFiles.getModel();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getRoot();
         DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) jTreeFiles.getLastSelectedPathComponent();
@@ -127,28 +169,30 @@ public class Explorador extends javax.swing.JFrame {
         tree.reload(parent);
         jTreeFiles.startEditingAtPath(new TreePath(newFile.getPath()));
     }//GEN-LAST:event_jMenuItemNewFileActionPerformed
-
+    /**
+     * EVENTO: Mouse Click Derecho
+     */
     private void jTreeFilesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTreeFilesMouseReleased
-        // TODO add your handling code here:
-        // Evento cuando se da click derecho
         if (jTreeFiles.getPathForLocation(evt.getX(), evt.getY()) == null) {
             jTreeFiles.clearSelection();
         }
-        
+
         if (evt.isPopupTrigger()) {
             jPopupMenu.show(jTreeFiles, evt.getX(), evt.getY());
         }
     }//GEN-LAST:event_jTreeFilesMouseReleased
-
+    /**
+     * EVENTO: Mouse Click Izquierdo
+     */
     private void jTreeFilesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTreeFilesMouseClicked
-        // TODO add your handling code here:
         if (jTreeFiles.getPathForLocation(evt.getX(), evt.getY()) == null) {
             jTreeFiles.clearSelection();
         }
     }//GEN-LAST:event_jTreeFilesMouseClicked
-
+    /**
+     * EVENTO: Botón Eliminar Archivo/Carpeta
+     */
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
         DefaultTreeModel tree = (DefaultTreeModel) jTreeFiles.getModel();
         DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) jTreeFiles.getLastSelectedPathComponent();
         if (selectedNode != null) {
@@ -157,12 +201,36 @@ public class Explorador extends javax.swing.JFrame {
             tree.reload(parent);
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+    /**
+     * EVENTO: Botón Buscar Archivo/Carpeta
+     */
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        DefaultTreeModel tree = (DefaultTreeModel) jTreeFiles.getModel();
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getRoot();
+        TreePath filePath = find(root, jTextFieldSearch.getText());
+        if (filePath == null) {
+            JOptionPane.showMessageDialog(null, "No se encontro el archivo o carpeta especificada");
+        } else {
+            jTreeFiles.expandPath(filePath);
+            jTreeFiles.clearSelection();
+            jTreeFiles.addSelectionPath(filePath);
+        }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+    /**
+     * EVENTO: Tecla presionada
+     */
+    private void jTreeFilesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTreeFilesKeyPressed
+        // Verificamos si la tecla que se pulso fue la tecla DELETE
+        if (evt.getKeyCode() == KeyEvent.VK_DELETE) jMenuItem1ActionPerformed(null);
+    }//GEN-LAST:event_jTreeFilesKeyPressed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
 
+        // --START-- CÓDIGO PARA USAR INTERFAZ POR DEFECTO DEL SISTEMA
         try {
             JFrame.setDefaultLookAndFeelDecorated(true);
             JDialog.setDefaultLookAndFeelDecorated(true);
@@ -171,6 +239,7 @@ public class Explorador extends javax.swing.JFrame {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "LookAndFeel not found");
         }
+        // --END--
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -180,8 +249,35 @@ public class Explorador extends javax.swing.JFrame {
         });
     }
 
+    /**
+     * El metodo find busca un nodo específico en el árbol que recibe como
+     * parametro
+     *
+     * @param root
+     * @param nameToSearch
+     * @return La ruta del nodo en el que obtuvo coinicdencia o null en caso de
+     * no obtener ninguna
+     */
+    public TreePath find(DefaultMutableTreeNode root, String nameToSearch) {
+        // Obtiene todos los nodos dentro del árbol que se envió como paramtro
+        Enumeration<DefaultMutableTreeNode> nodesList = root.breadthFirstEnumeration();
+        while (nodesList.hasMoreElements()) {
+            // Almacena el nodo actual
+            DefaultMutableTreeNode node = nodesList.nextElement();
+            System.out.println("Rutisha" + Arrays.toString(node.getPath()));
+            // Obtiene el nombre del nodo y lo compara con la cadena de texto
+            if (node.toString().equalsIgnoreCase(nameToSearch)) {
+                return new TreePath(node.getPath());
+            }
+        }
+        return null;
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -189,6 +285,7 @@ public class Explorador extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemNewFile;
     private javax.swing.JPopupMenu jPopupMenu;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField jTextFieldSearch;
     private javax.swing.JTree jTreeFiles;
     // End of variables declaration//GEN-END:variables
 }
